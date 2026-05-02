@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soft Pink Music Player</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background: radial-gradient(circle at top, #ffffff, #f5f5f5);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      padding:20px;
+    }
+
+    /* MAIN CARD */
+    .player{
+      width:100%;
+      max-width:420px;
+      background:#fff;
+      border-radius:25px;
+      padding:25px;
+      box-shadow: 0 10px 40px rgba(255,158,197,0.25), 0 0 60px rgba(255,158,197,0.15);
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* soft glow background */
+    .player::before{
+      content:"";
+      position:absolute;
+      width:300px;
+      height:300px;
+      background:#ff9ec5;
+      filter:blur(120px);
+      opacity:0.2;
+      top:-100px;
+      left:-100px;
+    }
+
+    .title{
+      text-align:center;
+      font-size:20px;
+      font-weight:bold;
+      color:#222;
+    }
+
+    .artist{
+      text-align:center;
+      font-size:13px;
+      color:#777;
+      margin-bottom:20px;
+    }
+
+    /* progress */
+    .progress-container{
+      width:100%;
+      height:6px;
+      background:#eee;
+      border-radius:10px;
+      cursor:pointer;
+      overflow:hidden;
+    }
+
+    .progress{
+      height:100%;
+      width:0%;
+      background:#ff9ec5;
+      box-shadow:0 0 10px #ff9ec5;
+    }
+
+    .time{
+      display:flex;
+      justify-content:space-between;
+      font-size:11px;
+      margin-top:5px;
+      color:#888;
+    }
+
+    /* controls */
+    .controls{
+      display:flex;
+      justify-content:center;
+      gap:25px;
+      margin-top:20px;
+    }
+
+    button{
+      border:none;
+      background:none;
+      font-size:20px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    button:hover{
+      transform:scale(1.2);
+      color:#ff9ec5;
+      text-shadow:0 0 10px #ff9ec5;
+    }
+
+    /* LYRICS CARD */
+    .lyrics-box{
+      margin-top:20px;
+      width:100%;
+      max-width:420px;
+      background:#fff;
+      border-radius:20px;
+      padding:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .lyrics-toggle{
+      color:#ff9ec5;
+      font-weight:bold;
+      cursor:pointer;
+      margin-bottom:10px;
+    }
+
+    .lyrics{
+      max-height:0;
+      overflow:hidden;
+      transition:0.5s ease;
+      font-size:13px;
+      color:#444;
+      white-space:pre-line;
+    }
+
+    .lyrics.open{
+      max-height:300px;
+      overflow-y:auto;
+    }
+
+    /* floating hearts glow */
+    .glow-heart{
+      position:absolute;
+      top:10px;
+      right:15px;
+      color:#ff9ec5;
+      opacity:0.6;
+      animation:float 3s infinite ease-in-out;
+    }
+
+    @keyframes float{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-10px)}
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- PLAYER -->
+<div class="player">
+  <div class="glow-heart">💗</div>
+
+  <div class="title">Message</div>
+  <div class="artist">IJ</div>
+
+  <div class="progress-container" id="progressContainer">
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <div class="time">
+    <span id="current">0:00</span>
+    <span id="duration">0:00</span>
+  </div>
+
+  <div class="controls">
+    <button>⏮</button>
+    <button id="play">▶️</button>
+    <button>⏭</button>
+  </div>
+</div>
+
+<!-- LYRICS -->
+<div class="lyrics-box">
+  <div class="lyrics-toggle" id="lyricsToggle">▼ Show</div>
+      <div class="lyrics" id="lyrics">Hindi ko na sana gagawin to kasi wala naman na sense pero 
+        it's May 2 sobrang special na araw unexpected day na pag bibigay ng chance pumasok sa 
+        buhay mo. 1 year na pala agad, sana ako nanliligaw sayo pero may mga bagay talaga hindi 
+        inaasahan. Kuwento ko lang ulit last year bago ko makuha yung chance na binigay mo sakin
+        honestly sobrang hopeless nako to the point na pag hindi na talaga puwede I'm just loving 
+        you in a silent way wala ganon naman kasi talaga ngyayari pag nag kaka gusto ako sinasantabi 
+        ko nalang kasi fear of rejection and  that time din sabi ko sobrang bad shot nako neto kay 
+        jane kasi may something samin ni majoy before pero sobrang lucky kasi yung plan ko na ibigay 
+        yung final letter or Siguro risk narin yun na masabi if meron pa ba chance although kahit wala 
+        naman chance mag papatuloy parin naman ako siguro assurance lang na valid na gawin lahat ng 
+        bagay and respect narin. Lucky ko kasi dun pa talaga sa ball night binigyan ng chance hindi ko 
+        rin expected na ganon magyayari kasi alam ko sarili ko na wala na Talaga pero hindi talaga 
+        natin masasabi lahat ng possible mangyari. Sobrang thankful ako sa gabi nayun dahil binali 
+        nya yung katahimikan at na baliwala lahat ng goodbye letter sa first rejection and  syempre na 
+        boost ulit pag ka tao ko na magawa lahat ng impossible. Sobrang saya nung una at ika lawang 
+        buwan pero meron bumabagabag sakin everytime napapansin ko yung daily routine natin ay pa ulit 
+        ulit natatakot ako na baka ganito ganyan like boring nako Hindi ko na ask and tanong if okay 
+        pa ba sa set up na ganito kasi masyado nag overthink. Overthink muna talaga lahat bago ma 
+        process na Sabihin lahat siguro nga nag kulang ako dun sa part na hindi ko rin pagiging open sa  
+        ibang bagay pero masyado narin Ako takot at gusto nalang lagi takpan yung takot nayun ng 
+        kasiyahan na  lagi ko na experience pag kasama at ka usap ka. Thank you din pala nung 
+        April 19 sa pag papatuloy sa bahay nyo at sa libre na dapat compute mo divide mo yung gastos 
+        dun sa foods and alak natin pero wala mapilit karin talaga  (hahaha) and also super thank you 
+        sa pag bibigay linaw dun sa bat tayo umabot sa point na ganon hindi na tuloy yung mga plans 
+        together although na explain ko naman ng very slight yung feed back sa mga ngyari pero hindi 
+        ko la totally na explain lahat kasi sobrang nahihiya nako sayo at sa group natin pero try ko 
+        best ko ma gets mo at nila yung point ko sa lahat pero yun nga mali ko rin talaga kung naginng 
+        open din talaga ako sayo siguro mas napag usapan pa lahat specially dun sa mga naging hadlang 
+        pero hindi rin talaga ma sure kasi hindi pala ako pumasok sa standard na meron ka sobrang baliktad 
+        tayo energetic ka ako hindi honestly kaya ko rin naman maging ganon inaaral ko palang kasi kung 
+        sino ka at yung nga gaya ng sabi ko sayo masyado ako nag focus dun sa papaganda mg images sa family 
+        mo hindi ko na isip na dapat ikaw nga pala muna bago sila. jane sorry talaga sa lahat alam ko may 
+        pang hihinayang dahil almost na isang words nalang yung ibibigay mo napa atras ka pa dahil sa mga 
+        naging actions ko and napakita ko and gusto ko lang din i clear na Hindi ako sa una lang magaling 
+        masyado lang ako naka focus sa madaming bagay at yung simple thing na big deal sayo hindi ko na 
+        napapansin sorry Talaga alam ko both tayo may mali pero mas mag sorry parin ako and also I'm not 
+        expecting din Talaga in return about this message gusto ko lang maparating lahat wala hiyang hiya 
+        nako in person pero if you give me a chance to talk heart to heart na tayo lang baka masabi ko na 
+        lahat and also ma ask ko narin iba ko pa tanong na hindi ko na ask that day na naka pag usap tayo 
+        and naka inom karin kasi kaya hindi ko na Talaga na clear lahat hindi ko sure if tatak sayo lahat 
+        ng mga sinabi ko at ma remember mo yung mga sinabi mo rin like gaya ng sinabi mo na "malay mo soon" 
+        dun sa part na sinasabi ko na honestly hindi parin me nakaka recover sa pain and sayo pero wala 
+        hindi mo narin pala ako nakikita sa future mo and nung narinig ko yun gusto ko umiyak pero hindi 
+        lang dun kaya mapapa iyak ako pati dun sa pag bibigay ng chance na mapag usapan unexpectedly pero 
+        sobrang saya pala pag alam mo na yung mga reason bat ngyari yun pero at the same time sobrang sakit 
+        at may pag sisi na dapat ganito ganyan isa pang masakit gusto mo marin bawiin yung picture na binigay 
+        mo sakin para mag heal nako pero sinabi mo to "malay mo soon" kaya magulo din talaga hindi ko alam 
+        kung dahil sa alak kaya mo nasabi yun kasi before naman nung pinag pilitan ko sarili ko sayo sobrang 
+        hindi kana sigurado at sure sa lahat ng sinabi mo pero to hear from you yung words na "malay mo soon" 
+        sobrang big impact sakin so yun lang naman and then also about Paul sobra nako inggit sakanya basta 
+        yun hindi ko na explain why. Ingat palagi and stay healthy and pati sa family mo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUDIO -->
+<audio id="audio" src="20260502_205128.aac"></audio>
+<audio id="bgMusic" src="Ben Ben - Lifetime (Reimagined).mp3" loop></audio>
+
+<script>
+const audio = document.getElementById('audio');
+const bgMusic = document.getElementById('bgMusic');
+const playBtn = document.getElementById('play');
+const progress = document.getElementById('progress');
+const progressContainer = document.getElementById('progressContainer');
+const current = document.getElementById('current');
+const duration = document.getElementById('duration');
+
+// AUTOPLAY BEST EFFORT
+window.addEventListener('load', ()=>{
+  bgMusic.volume = 0.25;
+  bgMusic.play().catch(()=>{
+    document.body.addEventListener('click', ()=>bgMusic.play(),{once:true});
+  });
+});
+
+// SYNC
+audio.addEventListener('play', ()=>bgMusic.pause());
+audio.addEventListener('pause', ()=>bgMusic.play());
+
+playBtn.addEventListener('click', async ()=>{
+  if(audio.paused){
+    await audio.play();
+  }else{
+    audio.pause();
+  }
+});
+
+// progress
+audio.addEventListener('timeupdate', ()=>{
+  if(!audio.duration) return;
+  progress.style.width = (audio.currentTime/audio.duration)*100 + '%';
+  current.textContent = format(audio.currentTime);
+  duration.textContent = format(audio.duration);
+});
+
+function format(t){
+  const m=Math.floor(t/60);
+  const s=Math.floor(t%60).toString().padStart(2,'0');
+  return `${m}:${s}`;
+}
+
+progressContainer.addEventListener('click',(e)=>{
+  const rect=progressContainer.getBoundingClientRect();
+  const pos=(e.clientX-rect.left)/rect.width;
+  audio.currentTime=pos*audio.duration;
+});
+
+// lyrics
+const lyricsToggle=document.getElementById('lyricsToggle');
+const lyrics=document.getElementById('lyrics');
+
+lyricsToggle.addEventListener('click',()=>{
+  lyrics.classList.toggle('open');
+  lyricsToggle.textContent=lyrics.classList.contains('open')?'▲ Hide':'▼ Show';
+});
+</script>
+
+</body>
+</html>
